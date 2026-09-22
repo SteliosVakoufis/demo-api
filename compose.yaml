@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: parcels
+      POSTGRES_USER: parcels
+      POSTGRES_PASSWORD: parcels
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U parcels -d parcels"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - parcel-db:/var/lib/postgresql/data
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+asyncpg://parcels:parcels@db:5432/parcels
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./src:/app/src:ro
+
+volumes:
+  parcel-db:
+

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "parcel-postgres-readonly": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--extra",
+        "dev",
+        "python",
+        "tools/postgres_mcp.py"
+      ],
+      "env": {
+        "MCP_DATABASE_URL": "postgresql://agent_readonly:workshop-readonly@localhost:5432/parcels"
+      }
+    }
+  }
+}
